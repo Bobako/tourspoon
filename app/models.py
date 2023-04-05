@@ -8,12 +8,12 @@ from app import db, manager
 class User(db.Model, UserMixin):
     __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
-    login = db.Column(db.String)  # login can be edited, so there is separate primary key
-    password_hash = db.Column(db.String, nullable=False)
+    login = db.Column(db.String(50))  # login can be edited, so there is separate primary key
+    password_hash = db.Column(db.String(32), nullable=False)
     is_moderator = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False)
-    profile_photo_path = db.Column(db.String)
-    bio = db.Column(db.String)
+    profile_photo_path = db.Column(db.String(50))
+    bio = db.Column(db.String(200))
 
     # relations
     tours = db.relationship("Tour", back_populates="created_by", cascade="all, delete",
@@ -39,7 +39,7 @@ class User(db.Model, UserMixin):
 class Tour(db.Model):
     __tablename__ = "tours"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
+    name = db.Column(db.String(50), nullable=False)
 
     # size of canvas for tour_blocks insertion
     canvas_height = db.Column(db.Integer, default=8, nullable=False)
@@ -80,9 +80,9 @@ class TourBlock(db.Model):
     __tablename__ = "tour_blocks"
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
-    text = db.Column(db.String)
-    content_path = db.Column(db.String)  # path to media content
+    name = db.Column(db.String(50))
+    text = db.Column(db.Text)
+    content_path = db.Column(db.String(50))  # path to media content
     type = db.Column(db.Integer, nullable=False, default=TOUR_BLOCK_TEXT_TYPE)  # one of TOUR_BLOCK_TYPES shown above
 
     show_on_map = db.Column(db.Boolean, nullable=False, default=False)
@@ -118,7 +118,7 @@ class TourBlock(db.Model):
 class TourTag(db.Model):
     __tablename__ = "tour_tags"
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    name = db.Column(db.String(50))
 
     def __init__(self, name):
         self.name = name
@@ -140,7 +140,7 @@ users_to_tags_association = db.Table(
 class TourReaction(db.Model):
     __tablename__ = "tour_reactions"
     id = db.Column(db.Integer, primary_key=True)
-    text = db.Column(db.String)
+    text = db.Column(db.Text)
 
     # criteria (1-10)
     beauty_criteria = db.Column(db.Integer, nullable=True, default=5)
