@@ -154,7 +154,7 @@ class TourReaction(db.Model):
     created_by_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     created_by = db.relationship("User", back_populates="reactions")
     tour_id = db.Column(db.Integer, db.ForeignKey("tours.id"))
-    tour = db.relationship("Tour", backpopulates="reactions")
+    tour = db.relationship("Tour", back_populates="reactions")
 
     def __init__(self, text, beaty_criteria, route_smoothness_criteria, attractions_criteria, accessibility_criteria,
                  created_by_id, tour_id):
