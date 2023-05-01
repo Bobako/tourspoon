@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/tour.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{url_for('static',filename = 'js/get_tour_canvas.js')}}"></script>
+    <script src="{{url_for('static',filename = 'js/delete.js')}}"></script>
+    <script src="{{url_for('static',filename = 'js/moderate.js')}}"></script>
+    <script>$(document).ready(function(){
+        let canvas = get_tour_canvas("{{tour.id}}");
+        $(".for_canvas").append(canvas);
+    });
+    </script>
+	<title>Tour</title>
+</head>
+<body>
+	<header>
+        <a class="main-page-link" href="{{url_for('index_page')}}"><h1>TourSpoon</h1></a>
+        <h1>{{tour.name}}</h1>
+        <div>{%if user.id == tour.created_by_id%}
+            <button onclick="delete_('tour', '{{tour.id}}')">Удалить</button>
+            {%endif%}
+            {%if user.is_moderator and not tour.moderated_by_id%}
+            <button onclick="moderate('{{tour.id}}', '{{user.id}}')">Публиковать</button>
+            {%endif%}
+            
+            
+        </div>
+     </header>
+    <main>
+        <div class="for_canvas">
+
+        </div>
+
+        {%if user%}
+        <div class="reaction">
+            <span class="author">Поделитесь своим мнением:</span>
+            <div class="reaction-core">
+                
+                <textarea form="reaction-form" name="text" style="resize: none;"></textarea>
+                <div class="criterias">
+                    <form id="reaction-form"method="post">
+                    <div><span class="crit-name">Красота окружения:</span> <span class="crit"><input step=1 min=1 max=10 type="number" name="beauty_criteria">/10</span></div>
+                    <div><span class="crit-name">Продуманность маршрута:</span> <span class="crit"><input step=1 min=1 max=10 type="number" name="route_smoothness_criteria">/10</span></div>
+                    <div><span class="crit-name">Интересные места:</span> <span class="crit"><input step=1 min=1 max=10 type="number" name="attractions_criteria">/10</span></div>
+                    <div><span class="crit-name">Доступность маршрута:</span> <span class="crit"><input step=1 min=1 max=10 type="number" name="accessibility_criteria">/10</span></div>
+                    <input type="submit" value="Отправить">
+                </form>
+                </div>
+            </div>
+        </div>
+        {%endif%}
+
+        {%for reaction in tour.reactions%}
+            <div class="reaction">
+                <span class="author">{{reaction.created_by.login}}</span>
+                <div class="reaction-core">
+                    <p>{{reaction.text}}</p>
+                    <div class="criterias">
+                        <div><span class="crit-name">Красота окружения:</span> <span class="crit">{{reaction.beauty_criteria}}/10</span></div>
+                        <div><span class="crit-name">Продуманность маршрута:</span> <span class="crit">{{reaction.route_smoothness_criteria}}/10</span></div>
+                        <div><span class="crit-name">Интересные места:</span> <span class="crit">{{reaction.attractions_criteria}}/10</span></div>
+                        <div><span class="crit-name">Доступность маршрута:</span> <span class="crit">{{reaction.accessibility_criteria}}/10</span></div>
+                        <div><span class="crit-name">Средний балл:</span> <span class="crit">{{reaction.overall_criteria}}/10</span></div>
+                        <div>{%if user.id == reaction.created_by_id%}
+                            <button onclick="delete_('reaction', '{{reaction.id}}')">Удалить</button>
+                            {%endif%}</div>
+                    </div>
+                </div>
+            </div>
+        {%endfor%}
+    </main>
+
+</body>
+</html>

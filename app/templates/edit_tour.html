@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/edit_tour.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{url_for('static',filename = 'js/edit_tour.js')}}"></script>
+	<title>Edit tour</title>
+</head>
+<body>
+	<header>
+        <a class="main-page-link" href="{{url_for('index_page')}}"><h1>TourSpoon</h1></a>
+        <input type="text" name="tour_name" placeholder="Название путеводителя" form="main_form"
+        {%if tour%}
+            value="{{tour.name}}"
+        {%else%}
+            value="Новый путеводитель"
+        {%endif%}
+        >
+    </header>
+    <main>
+        <div class="blocks">
+            <div class="stable-block" onmousedown="drag_stable_block(event, this)"></div>
+        </div>
+        
+        <form id="main_form" class="canvas" enctype="multipart/form-data">
+            {%if tour%}
+            {%for block in tour.blocks%}
+
+            <div class="block" id="{{block.id}}"
+                onmousedown=resize(event);
+                style='grid-area:{{block.row}}/{{block.column}}/{{block.row+block.height}}/{{block.column+block.width}}'>                
+                <div onmousedown="drag_n_drop(event, this)"> 
+                
+                    {%if block.type == 0 or block.type == 6%}
+                            {%if block.name%}
+                                <h3 classs="preview_name">{{block.name}}</h3>
+                            {%endif%}
+
+                            {%if block.text%}
+                                <p class="preview_text">{{block.text}}</p>
+                            {%endif%}
+                    {%endif%}
+
+
+                    {%if block.type == 1%}
+                        <img class="media-preview" src="{{url_for('static', filename='contents/'+block.content_path)}}" alt="">
+                    {%endif%}
+
+                    {%if block.type == 3%}
+                        <video class="media-preview" controls src="{{url_for('static', filename='contents/'+block.content_path)}}"></video>
+                    {%endif%}
+
+                    {%if block.type == 4%}
+                        <audio class="media-preview" controls src="{{url_for('static', filename='contents/'+block.content_path)}}"></video>
+                    {%endif%}
+
+                </div>
+                <input hidden name="{{block.id}}:name" value="{{block.name}}">
+                <input hidden name="{{block.id}}:text" value="{{block.text}}">
+                <input hidden name="{{block.id}}:old_content_path" value="{{block.content_path}}">
+                <input type='file' hidden name="{{block.id}}:content_path">
+                <input hidden name="{{block.id}}:type_" value="{{block.type}}">
+                <input type='checkbox' hidden name="{{block.id}}:show_on_map" {%if block.show_on_map%}checked{%endif%}>
+                <input hidden name="{{block.id}}:latitude" value="{{block.latitude}}">
+                <input hidden name="{{block.id}}:longitude" value="{{block.longitude}}">
+                <input hidden name="{{block.id}}:width" value="{{block.width}}">
+                <input hidden name="{{block.id}}:column" value="{{block.column}}">
+                <input hidden name="{{block.id}}:row" value="{{block.row}}">
+                <input hidden name="{{block.id}}:height" value="{{block.height}}">
+                <input hidden name="{{block.id}}:tour_id" value="{{block.tour_id}}">
+            </div>
+
+
+            {%endfor%}
+            {%endif%}
+        </form>
+        <div class="properties">
+            <label for="type_">Тип</label>
+            <select id="type_" name="type_">
+                <option value=0>Текст</option>
+                <option value=1>Изображение</option>
+                <option value=2>Сссылка</option>
+                <option value=3>Видео</option>
+                <option value=4>Звукозапись</option>
+                <option value=5>Карта</option>
+                <option value=6>Точка маршрута</option>
+            </select>
+
+            <label for="name">Заголовок</label>
+            <input type="text" id="name" name="name">
+
+            <label for="text">Текст блока</label>
+            <textarea id="text" name="text"></textarea>
+            
+            <label for="content_path">Загрузить медиа</label>
+            <input type="file" id="content_path" name="content_path">
+            
+            <label for="show_on_map">Показывать на карте</label>
+            <input type="checkbox"id="show_on_map" name="show_on_map">
+            
+            <label for="latitude">Широта</label>
+            <input type="number" step="0.00001" id="latitude" name="latitude" value="0">
+
+            <label for="longitude">Долгота</label>
+            <input type="number" step="0.00001" id="longitude" name="longitude" value="0">   
+            <div class="bottom-panel">
+                <label for="tags">Выберите тэги</label>
+                <select form="main_form" name="tags" id="tags" multiple>
+                    {%for tag in tags%}
+                    <option value="{{tag.id}}"
+                    {%if tour%}
+                        {%if tag in tour.tags%}
+                            selected
+                        {%endif%}
+                    {%endif%}
+                    >{{tag.name}}</option>
+                    {%endfor%}
+                </select>
+                <button id="submit-button" type="submit" form="main_form" formmethod="post">Сохранить</button> 
+                
+            </div>
+            
+        </div>
+    </main>
+</body>
+</html>

@@ -2,9 +2,59 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>TourSpoon</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/main.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/tour.css')}}">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/index.css')}}">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="{{url_for('static',filename = 'js/get_tour_canvas.js')}}"></script>
+    <script src="{{url_for('static',filename = 'js/index.js')}}"></script>
 </head>
 <body>
+<header>
+    <a class="main-page-link" href="{{url_for('index_page')}}"><h1>TourSpoon</h1></a>
+    <div class="search-bar">
+        <input class="search-input" type="text" name="search" placeholder="Поиск">
+        <button class="search-button">Искать</button>
+        <select name="select-category">
+            <option selected value="placeholder">Категории</option>
+            {%for tag in tags%}
+            <option value="{{tag.id}}">{{tag.name}}</option>
+            {%endfor%}
+        </select>
+    </div>
+    <div class="links-block">
+        <a class="create" href="{{url_for('tour_page', tour_id='create')}}">Создать</a>
+        {%if user%}
+            <a class="self-check" href="{{url_for('index_page')+'?u='+ user.id|string}}">Своё</a>
+            {%if user.is_moderator%}
+            <a class="moderate" href="{{url_for('index_page')+'?nm=true'}}">Помодерировать</a>
+            {%endif%}
+        {%endif%}
+        <a class="self-check" href="{{url_for('cab_page')}}">Личный кабинет</a>
+    </div>    
+</header>
+<main>
+    {%for tour in tours%}
+        <div class="tour">
+            <div class="tour-header">
+                <a href="{{url_for('tour_page', tour_id=tour.id)}}"><h2>{{tour.name}}</h2></a>
+            </div>
+            <div class="for-canvas" id="{{tour.id}}">
 
+            </div>
+            <div class="tour-footer">
+                <span class="last_updated_at">Последнее изменение: {{tour.last_updated_at.strftime('%Y-%m-%d %H:%M')}}
+                Автор: <a class="created-by-link" href="{{url_for('index_page')+'?u='+tour.created_by_id|string}}">{{tour.created_by.login}}</a></span>
+                <div class="tour-tags">
+                    {%for tag in tour.tags%}
+                        <span class="tag">{{tag.name}}</span>
+                    {%endfor%}
+                </div>
+            </div>
+
+        </div>
+    {%endfor%}
+</main>
 </body>
 </html>

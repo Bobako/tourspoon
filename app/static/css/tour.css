@@ -1,0 +1,84 @@
+main{
+    width: 60%;
+    min-width: 1000px;
+    height: 100%;
+    margin: auto;
+    
+}
+
+.block-container{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap:15px;
+    background-color: #a4a7b4;
+    box-shadow: #818181cc 2px 2px 2px;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding:10px;
+}
+
+.block{
+    padding:10px;
+    border-radius: 10px;
+    background-color: #FFFF;
+    box-shadow: #818181cc 2px 2px 2px;
+    overflow: hidden;
+}
+
+.block img{
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.block video{
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+}
+
+.block audio{
+    width: 100%;
+    padding:15px;
+}
+
+
+.reaction{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding:10px;
+    background-color: #FFFF;
+    margin-top:20px;
+    border-radius: 10px;
+}
+
+.reaction-core{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;  
+
+}
+
+.reaction > p, .reaction > textarea {
+    display: block;
+    height: 100%;
+    width: 60%;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: #b3b3b3;
+}
+
+.criterias{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 15px
+}
+
+.criterias > div{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

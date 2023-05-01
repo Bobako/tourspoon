@@ -1,0 +1,39 @@
+<div class="block-container" style="grid-template-rows: repeat({{tour.canvas_height}},100px);">
+    {%for block in tour.blocks%}
+        <div id="{{block.id}}" class="block"
+        style='grid-area:{{block.row}}/{{block.column}}/{{block.row+block.height}}/{{block.column+block.width}}'>
+            
+            {%if block.type == 0 or block.type == 6%}
+                {%if block.name%}
+                    <h3>{{block.name}}</h3>
+                {%endif%}
+
+                {%if block.text%}
+                    <p>{{block.text}}</p>
+                {%endif%}
+            {%endif%}
+
+            {%if block.type == 1%}
+            <img src="{{url_for('static', filename='contents/'+block.content_path)}}" alt="">
+            {%endif%}
+
+            {%if block.type == 2%}
+                <a href="{{block.text}}">{{block.name}}</a>
+            
+            {%endif%}
+
+            {%if block.type == 3%}
+            <video controls src="{{url_for('static', filename='contents/'+block.content_path)}}"></video>
+            {%endif%}
+
+            {%if block.type == 4%}
+            <audio controls src="{{url_for('static', filename='contents/'+block.content_path)}}"></video>
+            {%endif%}
+
+            {%if block.type == 5%}
+            <p>Карту пока не завезли</p>
+            {%endif%}
+
+        </div>
+    {%endfor%}
+</div>

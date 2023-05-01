@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="{{url_for('static',filename = 'css/login_reg.css')}}">
+	<title>Login</title>
+</head>
+<body>
+	<div class = "auth"> 
+		<p class = "warning">
+			{% with message = get_flashed_messages() %}
+			{% if message%}
+				{{message[0]}}
+			{% endif %}
+			{% endwith %}
+		</p>
+		<form class = "auth_form" action = "" method="post">
+			<input type="text" name="login" class = "white-box" placeholder="Логин"><br>
+			<input type="password" name="password" class = "white-box" placeholder="Пароль"><br>
+			<input type="submit" value = "Войти"class = "white-box btn">
+
+		</form>
+		<a href = "/reg" class = "a"><p>Нет аккаунта? Зарегестироваться</p></a>
+	</div>
+</body>
+</html>
